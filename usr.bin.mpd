@@ -1,0 +1,30 @@
+# vim:syntax=apparmor
+# AppAmor local profile for mpd
+
+#include <tunables/global>
+
+profile mpd-daemon /usr/bin/mpd {
+  #include <abstractions/audio>
+  #include <abstractions/base>
+
+  /usr/bin/mpd mr,
+  /usr/bin/pulseaudio Px,
+
+  /sys/devices/system/node/ r,
+  /sys/devices/system/node/** r,
+  /etc/passwd r,
+  /etc/nsswitch.conf r,
+  /etc/hosts r,
+  /etc/host.conf r,
+  /etc/resolv.conf r,
+  /etc/gai.conf r,
+
+  owner @{HOME}/Música/ r,
+  owner @{HOME}/Música/** r,
+  owner @{HOME}/.config/mpd/mpd.conf r,
+  owner @{HOME}/.config/mpd/mpd.log rw,
+  owner @{HOME}/.config/mpd/pid rw,
+  owner @{HOME}/.config/mpd/sticker.sql rwk,
+  owner @{HOME}/.config/mpd/tag_cache rw,
+
+}
