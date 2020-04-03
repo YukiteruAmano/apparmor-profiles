@@ -1,0 +1,41 @@
+# vim:syntax=apparmor
+# AppAmor local profile for netstat
+
+#include <tunables/global>
+
+profile netstat /{usr/,}bin/netstat {
+    #include <abstractions/base>
+    #include <abstractions/consoles>
+    #include <abstractions/nameservice>
+
+    # Capabilities for binary
+    capability dac_override,
+    capability dac_read_search,
+    deny capability sys_ptrace,
+
+    # Access to binary
+    /{usr/,}bin/netstat rmix,
+
+    # /etc access files
+    /etc/networks r,
+
+    # /proc access
+    @{PROC} r,
+    @{PROC}/@{pids}/cmdline r,
+    @{PROC}/@{pids}/fd r,
+    @{PROC}/@{pids}/fd/* r,
+    @{PROC}/net r,
+    @{PROC}/net/* r,
+    @{PROC}/*/net/* r,
+ 
+    owner @{PROC}/@{pid}/net/raw r,
+    owner @{PROC}/@{pid}/net/raw6 r,
+    owner @{PROC}/@{pid}/net/tcp r,
+    owner @{PROC}/@{pid}/net/tcp6 r,
+    owner @{PROC}/@{pid}/net/udp r,
+    owner @{PROC}/@{pid}/net/udp6 r,
+    owner @{PROC}/@{pid}/net/unix r,
+
+    # Local configuration
+    #include <local/bin.netstat>
+}

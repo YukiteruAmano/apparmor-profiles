@@ -1,0 +1,41 @@
+# vim:syntax=apparmor
+# AppAmor local profile for passwd
+
+#include <tunables/global>
+
+profile passwd /usr/bin/passwd {
+    #include <abstractions/authentication>
+    #include <abstractions/base>
+    #include <abstractions/consoles>
+    #include <abstractions/nameservice>
+    #include <abstractions/wutmp>
+
+    # Capabilities for binary
+    capability chown,
+    capability sys_resource,
+    capability audit_write,
+
+    # /etc access files
+    /etc/.pwd.lock wk,
+    /etc/pwdutils/logging r,
+    /etc/nshadow rw,
+    /etc/shadow rwl,
+    /etc/shadow.old rwl,
+    /etc/shadow.tmp?????? rwl,
+
+    # /proc access
+    @{PROC}/@{pid}/loginuid r,
+
+    # Binary and libs access
+    /usr/bin/passwd mr,
+    /usr/lib/pwdutils/lib*.so* mr,
+    /usr/lib64/pwdutils/lib*.so* mr,
+
+    # /usr/share access
+    /usr/share/cracklib/pw_dict.hwm r,
+    /usr/share/cracklib/pw_dict.pwd r,
+    /usr/share/cracklib/pw_dict.pwi r,
+
+    # Local configuration
+    #include <local/usr.bin.passwd>
+}

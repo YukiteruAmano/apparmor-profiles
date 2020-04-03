@@ -1,0 +1,10 @@
+# vim:syntax=apparmor
+# AppAmor local profile for weechat
+
+    # exec for script
+    /usr/bin/* ixr,
+    /bin/* ixr,
+
+    # for xdcc downloads
+    owner @{HOME}/Descargas/ rw,
+    owner @{HOME}/Descargas/** rw,

@@ -1,0 +1,57 @@
+# vim:syntax=apparmor
+# AppAmor local profile for transmission-gtk
+
+#include <tunables/global>
+
+/usr/bin/transmission-gtk {
+    #include <abstractions/audio>
+    #include <abstractions/base>
+    #include <abstractions/dbus-session>
+    #include <abstractions/fonts>
+    #include <abstractions/gnome>
+    #include <abstractions/ibus>
+    #include <abstractions/p11-kit>
+    #include <abstractions/nameservice>
+    #include <abstractions/user-download>
+    #include <abstractions/gnome>
+
+    # allow directory listings (ie 'r' on directories) so browsing via the file
+    # dialog works
+    / r,
+    /**/ r,
+
+    @{HOME}/ r,
+
+    owner @{HOME}/ r,
+    owner @{HOME}/** r,
+    owner @{HOME}/.cache/transmission/ rw,
+    owner @{HOME}/.cache/transmission/** rw,
+    owner @{HOME}/.config/gtk-2.0/** rw,
+    owner @{HOME}/.config/transmission/ rw,
+    owner @{HOME}/.config/transmission/lock rwk,
+    owner @{HOME}/.config/transmission/** rw,
+    owner @{HOME}/.{cache,config}/dconf/user rw,
+    owner @{HOME}/.recently-used.* krw,
+
+    /etc/fstab r,
+    @{PROC}/[0-9]*/fd/ r,
+
+    /usr/bin/transmission rix,
+    /usr/lib/ r,
+    /usr/local/share/** r,
+    /usr/share/ r,
+    /usr/share/** r,
+
+    # UUID
+    /proc/sys/kernel/random/uuid  r,
+
+    /run/user/*/dconf/user rw,
+
+    # From evince's profile
+    /dev/.udev/{data,db}/* r,
+    /etc/udev/udev.conf r,
+    /sys/devices/**/block/**/uevent r,
+
+    # Site-specific additions and overrides. See local/README for details.
+    #include <local/usr.bin.transmission-gtk>
+}

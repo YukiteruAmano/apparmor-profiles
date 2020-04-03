@@ -1,0 +1,135 @@
+#include <tunables/global>
+
+profile discord /usr/share/discord/Discord {
+  #include <abstractions/audio>
+  #include <abstractions/dri-common>
+  #include <abstractions/dri-enumerate>
+  #include <abstractions/enchant>
+  #include <abstractions/mesa>
+  #include <abstractions/nameservice>
+  #include <abstractions/gnome>
+  #include <abstractions/ssl_certs>
+
+  # Discord will not work at all without this
+
+  capability setgid,
+  capability setuid,
+  capability sys_chroot,
+  capability sys_admin,
+  deny capability sys_ptrace,
+  deny ptrace,
+
+  # Networking
+
+  owner @{HOME}/.pki/nssdb/* rwk,
+
+  # Subprocesses
+
+  /usr/bin/dash mrix,
+  /usr/share/discord/Discord mrix,
+  /usr/share/discord/chrome-sandbox mrix,
+  owner /dev/shm/.org.chromium.Chromium.* rw,
+
+  # Other exec
+
+  /usr/lib/firefox/firefox mrix,
+
+  # /proc acccess
+
+  @{PROC}/ r,
+  @{PROC}/* r,
+  @{PROC}/@{pid}/ r,
+  owner @{PROC}/@{pid}/oom_adj rw,
+  @{PROC}/@{pid}/* r,
+  @{PROC}/@{pid}/{gid_map,setgroups,uid_map} w,
+  @{PROC}/@{pid}/fd/ r,
+  @{PROC}/@{pid}/fd/* r,
+
+  # /tmp access
+
+  owner /tmp/discord.sock w,
+
+  # /sys access
+
+  /sys/bus/pci/devices/ r,
+  @{sys}/bus/pci/devices/[0-9]*/{class,device,irq,resource,vendor} r,
+  @{sys}/devices/pci[0-9]*/{class,device,irq,resource,vendor} r,
+  @{sys}/devices/pci[0-9]*/[0-9]*/{class,device,irq,resource,vendor} r,
+  @{sys}/devices/pci[0-9]*/[0-9]*/[0-9]*/{class,device,irq,resource,vendor} r,
+  /sys/devices/pci*/*/uevent r,
+
+  # Permissions for run discord
+
+  # Miscellaneous
+
+  /usr/share/discord/*.so rm,  
+  /usr/share/discord/** r,  
+
+  # dconf and shm access
+
+  owner /run/user/1000/dconf/user rw, 
+  owner /dev/shm/shmfd-* rw,
+  owner /run/user/1000/discord-* rw,
+
+  # /dev access
+  /dev/ r,
+  /dev/* r,
+ 
+  # Config -- even tho mw permissions are somewhat unfortunate, discord needs
+  # this to run as it downloads the actual application to this directory
+
+  owner @{HOME}/.config/discord/ rw,
+  owner @{HOME}/.config/discord/** mrwk,
+  owner @{HOME}/Descargas/ rw,
+  owner @{HOME}/Descargas/** rw,
+  owner @{HOME}/.cache/thumbnails/** rw,
+  owner @{HOME}/.config/dconf/user rw,
+  # Don't allow opening files with arbitrary programs
+
+  deny /usr/bin/xdg-mime x,
+  deny /usr/bin/xdg-open x,
+  deny /usr/bin/which x,
+  deny /usr/bin/tr x,
+  deny /usr/bin/mawk x,
+  deny /usr/bin/cut x,
+  deny /usr/bin/sed x,
+  deny /usr/bin/gio x,
+  deny /usr/bin/grep x,
+  deny /usr/bin/egrep x,
+  deny /usr/bin/head x,
+
+  # File picker still works without these permissions
+
+  deny /etc/{fstab,machine-id} r,
+
+  # Deny unnecessary permissions
+
+  deny @{HOME}/.pki/ rw,
+  deny /dev/pts/[0-9] rw,
+  deny /dev/tty* rw,
+  deny "/tmp/Discord Crashes/" w,
+  deny /sys/devices/virtual/tty/tty0/active r,
+  deny /proc/*/{cmdline,oom_score_adj,stat,statm,comm} rw,
+  deny /proc/*/task/ r,
+  deny /proc/sys/fs/inotify/max_user_watches r,
+  deny /proc/sys/kernel/yama/ptrace_scope r,
+
+  # Deny access system files
+
+  deny /etc/hosts r,
+  deny /etc/group r,
+  deny /etc/passwd r,
+  deny /etc/apparmor/ r,
+  deny /etc/apparmor.d/ r,
+  deny /etc/shadow r,
+  deny /etc/nftables r,
+  deny /etc/pam.conf r,
+  deny /etc/systemd/ r,
+  deny /etc/sysctl.conf r,
+  deny /etc/sysctl.d/ r,
+  deny /mnt/ rwk,
+  deny /boot/ rwk,
+  deny /vmlinux* rkw, 
+  deny /initrd* rkw, 
+
+}

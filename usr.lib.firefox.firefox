@@ -1,0 +1,192 @@
+# vim:syntax=apparmor
+# AppAmor local profile for firefox
+
+#include <tunables/global>
+
+profile firefox /usr/lib/firefox/firefox {
+    #include <abstractions/audio>
+    #include <abstractions/cups-client>
+    #include <abstractions/dbus-session>
+    #include <abstractions/gnome>
+    #include <abstractions/ibus>
+    #include <abstractions/kde>
+    #include <abstractions/nameservice>
+    #include <abstractions/openssl>
+    #include <abstractions/user-write>
+    #include <abstractions/user-download>
+    #include <abstractions/ssl_certs>
+    #include <abstractions/python>
+    #include <abstractions/dri-enumerate>
+    #include <abstractions/mesa>
+    #include <abstractions/dconf>
+
+    #########################
+    #### Access policies ####
+    #########################
+
+    # Basic bin access for execute
+
+    /usr/bin/basename ixr,
+    /usr/bin/dirname ixr,
+    /usr/bin/pwd ixr,
+    /{usr/,}sbin/killall5 ixr,
+    /{usr/,}bin/which ixr,
+    /usr/bin/lsb_release ixr,
+    /usr/bin/expr ixr,
+    /bin/bash ixr,
+    /usr/bin/getopt ixr,
+    /bin/sed ixr,
+    /usr/bin/tr ixr,
+    /bin/tr ixr,
+    /usr/bin/find ixr,
+    /usr/bin/head ixr,
+
+
+    # Used in private mode
+
+    /usr/bin/shred ixr,
+
+    # Special permission for execute 
+
+    /usr/lib*/firefox*/** ixr,
+
+    # Access for networking
+
+    @{PROC}/@{pid}/net/if_inet6 r,
+    @{PROC}/@{pid}/net/ipv6_route r,
+
+    # Access for hostname, timezone and lsb-release
+
+    /etc/hostname r,
+    /etc/timezone r,
+    /etc/lsb-release r,
+
+    # Access for filetypes and others stuff
+
+    /etc/mailcap r,
+    /etc/mime.types r,
+
+    # Access limited for proc
+
+    @{PROC}/** r,
+    @{PROC}/@{pid}/cmdline r,
+    @{PROC}/@{pid}/mountinfo r,
+    @{PROC}/@{pid}/stat r,
+    @{PROC}/@{pid}/status r,
+    @{PROC}/@{pid}/environ r,
+    @{PROC}/@{pid}/auxv r,
+
+    # for mount-points
+
+    /etc/mtab r,
+    /etc/fstab r,
+
+    # Make browsing directories work
+
+    / r,
+    /**/ r,
+
+    # Minor udev stuff
+
+    /etc/udev/udev.conf r,
+    /sys/devices/** r,
+    /sys/device/**/name r,
+    /sys/device/**/uevent r,
+    /sys/device/pci**/config r,
+    /run/udev/data/* r,
+    /run/mount/utab r,
+    /sys/bus/ r,
+    /sys/class/ r,
+    /sys/class/drm/ r,
+    /sys/class/input/ r,
+
+    # SHM
+
+    owner /dev/shm/* rw,
+
+    # allow access to documentation and other files the user may want to look
+    # at in /usr
+ 
+    /usr/{include,share,src}/** r,
+
+     # Audio support
+    
+    /etc/asound.conf r,
+    /usr/bin/pulseaudio mixr,
+    /usr/lib64/pulse-*/modules/* mixr,
+    /etc/pulse/ r,
+    /etc/pulse/** r,
+
+    # Access for home
+
+    owner @{HOME}/ r,
+    owner @{HOME}/.thumbnails/ rw,
+    owner @{HOME}/.thumbnails/** rw,
+    owner @{HOME}/.cache/* rwk,
+    owner @{HOME}/.cache/mozilla rwk,
+    owner @{HOME}/.cache/mozilla/**/** rwk,
+    owner @{HOME}/.{firefox,mozilla}/ rw,
+    owner @{HOME}/.{firefox,mozilla}/** rw,
+    owner @{HOME}/.{firefox,mozilla}/**/*.{db,parentlock,sqlite}* k,
+    owner @{HOME}/.{firefox,mozilla}/plugins/** rm,
+    owner @{HOME}/.{firefox,mozilla}/**/plugins/** rm,
+    owner @{HOME}/.mozilla/firefox/**/extensions/** mixr,
+    owner @{HOME}/.mozilla/firefox/**/{gmp,gmp-gmpopenh264,gmp-widevinecdm}/** mixr,
+    owner @{HOME}/.icons/** r,
+    owner @{HOME}/.Xdefaults r,
+
+    # Access for dconf
+    owner /{,var/}run/user/*/dconf/user rw,
+    owner @{HOME}/.config/dconf/user rw,
+
+    # Nvidia support
+    /dev/nvidia0 rwk,
+    /etc/nvidia/* r, 
+    /dev/nvidiactl rwk, 
+    owner @{HOME}/.nv/ rwk,
+    owner @{HOME}/.nv/* rwk,
+    owner @{HOME}/.nGLCache/ rwk,
+    owner @{HOME}/.nv/GLCache/* rwk,
+    owner @{HOME}/.nv/GLCache/*/* rwk,
+
+    # Dash
+    /usr/bin/dash mixr,
+    /usr/bin/bash mixr,
+    /usr/bin/zsh mixr,
+    /usr/bin/sh mixr,
+
+    #######################
+    #### Deny policies ####
+    #######################
+
+    # Deny writes
+    
+    deny /usr/lib*/firefox*/update.test w,
+    deny /usr/lib*/mozilla/extensions/**/ w,
+    deny /usr/lib*/xulrunner-addons/extensions/**/ w,
+    deny /usr/share/mozilla/extensions/**/ w,
+    deny /usr/share/mozilla/ w,
+
+    # Security. No access at two important filess
+    
+    deny /etc/passwd r,
+    deny /etc/group r,
+
+    # Deny write access for binary firefox 
+    
+    deny /usr/lib64/firefox*/** w,
+        
+    # Denied access for special archivos and directories
+    
+    deny /.suspended r,
+    deny /boot/ r,
+    deny /boot/* r, 
+    deny /var/cache/fontconfig/ w,
+
+    # Deny access for gconftool for configuration
+    
+    deny /usr/bin/gconftool-2 x,
+
+    # Local config for firefox
+    #include <local/usr.lib.firefox.firefox>
+}

@@ -1,0 +1,6 @@
+# vim:syntax=apparmor
+# AppAmor local profile for transmission-gtk
+
+    # Dirs for download
+    owner @{HOME}/Torrents/ rwk,
+    owner @{HOME}/Torrents/** rwk,

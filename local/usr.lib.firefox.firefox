@@ -1,0 +1,8 @@
+# Configuraciones locales
+
+	# Integración con otros programas
+	/usr/bin/chrome-gnome-shell mixr,
+	/usr/bin/transmission-gtk mixr,
+	/usr/bin/Discord mixr,
+	@{HOME}/Descargas/ rwk,
+	@{HOME}/Descargas/** rwk,

@@ -1,0 +1,65 @@
+# vim:syntax=apparmor
+# AppAmor local profile for telegram
+
+#include <tunables/global>
+
+profile Telegram /usr/bin/telegram-desktop {
+    #include <abstractions/base>
+    #include <abstractions/fonts>
+    #include <abstractions/audio>
+    #include <abstractions/kde>
+    #include <abstractions/dbus-session>
+    #include <abstractions/nameservice>
+
+    # access to binary
+    /usr/bin/telegram-desktop rmPx,
+
+    # Access for apps on system
+    /usr/bin/which  mixr,
+    /usr/bin/dash   mixr,
+    /usr/bin/bash   mixr,
+    /usr/bin/sh     mixr,
+    /usr/bin/zsh    mixr,
+    /usr/bin/gvfs-open mixr,
+    /usr/bin/grep   mixr,
+    /usr/bin/egrep   mixr,
+    /usr/bin/xdg-open mixr,
+
+    # Firefox Debian
+    /usr/lib/firefox/firefox mixr,
+
+    # Libs access
+    /usr/lib*/mesa/** rm,
+
+    # dconf config
+    owner /run/user/*/dconf/user rw,
+    owner /run/user/*/* rwk,
+    owner /run/user/*/*/ rwk,
+
+    # Share
+    /usr/share/** r,
+
+    # Home access
+    owner @{HOME}/.local/share r,
+    owner @{HOME}/.local/share/TelegramDesktop/ rwk,
+    owner @{HOME}/.local/share/TelegramDesktop/** rwkl,
+    owner @{HOME}/.icons/** r,
+    owner @{HOME}/.cache/** rwk,
+    owner @{HOME}/ r,
+    owner @{HOME}/.local/** r,
+    owner @{HOME}/.config/** r,
+    owner @{HOME}/.config/enchant/* rwk,
+
+    # Browser
+    / r,
+    /** r,
+
+    # shared libraries
+    /usr/lib/** rm,
+
+    # /proc
+    @{PROC}/*/cmdline r,
+
+    # Local profile
+    #include <local/usr.bin.telegram-desktop>
+}

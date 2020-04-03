@@ -1,0 +1,46 @@
+# vim:syntax=apparmor
+# AppAmor local profile for weechat
+
+#include <tunables/global>
+
+profile weechat /usr/bin/weechat {
+    #include <abstractions/base>
+    #include <abstractions/nameservice>
+    #include <abstractions/aspell>
+    #include <abstractions/bash>
+    #include <abstractions/perl>
+    #include <abstractions/python>
+    #include <abstractions/ssl_certs>
+
+    # exec other stuff
+    /usr/bin/uname ixr,
+    /bin/uname ixr,
+    /etc/terminfo/** r,
+    /bin/bash ixr,
+    /bin/sh ixr,
+    /bin/zsh ixr,
+    /usr/bin/uptime ixr,
+
+    # Access to /proc
+    @{PROC}/@{pid}/statm r,
+
+    # Plugins and scripts
+    /usr/lib*/weechat/plugins/** rm,
+    /usr/share/weechat/** r,
+
+    # Allow transitions to ourself
+    /usr/bin/weechat-ncurses rmix,
+
+    # Explore fs in read-only mode
+    / r,
+    /** r,
+
+    # Configuration files and logs
+    owner @{HOME}/ r,
+    owner @{HOME}/.weechat/ rw,
+    owner @{HOME}/.weechat/** rw,
+    owner @{HOME}/.weechat/weechat.log rwk,
+
+    # Local config for weechat
+    #include <local/usr.bin.weechat>
+}
