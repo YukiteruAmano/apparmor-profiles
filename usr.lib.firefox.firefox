@@ -149,6 +149,10 @@ profile firefox /usr/lib/firefox/firefox {
     owner @{HOME}/.nv/GLCache/* rwk,
     owner @{HOME}/.nv/GLCache/*/* rwk,
 
+    # Webcam
+    /dev/video0 rw,
+    /dev/video1 rw,
+    
     # Dash
     /usr/bin/dash mixr,
     /usr/bin/bash mixr,
