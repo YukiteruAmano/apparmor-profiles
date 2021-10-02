@@ -85,8 +85,8 @@ profile thunderbird /usr/lib/thunderbird/thunderbird{,-bin} {
     owner @{HOME}/.cache/thunderbird/** rw,
     owner @{HOME}/.{icedove,thunderbird}/**/extensions/** mixrw,
     owner @{HOME}/.mozilla/ rw,
-    owner @{HOME}/.mozilla/extensions/          rw,
-    owner @{HOME}/.mozilla/extensions/**        mixr,
+    owner @{HOME}/.mozilla/extensions/ rw,
+    owner @{HOME}/.mozilla/extensions/** mixr,
 
     # Only descargas access
     owner @{HOME}/Descargas rw,
