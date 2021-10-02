@@ -3,7 +3,7 @@
 
 #include <tunables/global>
 
-profile discord /usr/share/discord/Discord {
+profile discord /opt/Discord/Discord {
     #include <abstractions/audio>
     #include <abstractions/dri-common>
     #include <abstractions/dri-enumerate>
@@ -30,8 +30,8 @@ profile discord /usr/share/discord/Discord {
     # Subprocesses
 
     /usr/bin/dash mrix,
-    /usr/share/discord/Discord mrix,
-    /usr/share/discord/chrome-sandbox mrix,
+    /opt/Discord/Discord mrix,
+    /opt/Discord/chrome-sandbox mrix,
     owner /dev/shm/.org.chromium.Chromium.* rw,
 
     # Other exec
@@ -66,8 +66,8 @@ profile discord /usr/share/discord/Discord {
 
     # Miscellaneous
 
-    /usr/share/discord/*.so rm,  
-    /usr/share/discord/** r,  
+    /opt/Discord/*.so rm,  
+    /opt/Discord/** r,  
 
     # dconf and shm access
 
@@ -136,5 +136,6 @@ profile discord /usr/share/discord/Discord {
     deny /vmlinux* rkw, 
     deny /initrd* rkw, 
 
-    #include <local/usr.bin.discord>
+    #include <local/opt.Discord.Discord>
+
 }

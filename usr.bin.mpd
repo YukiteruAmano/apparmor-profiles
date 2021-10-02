@@ -21,10 +21,9 @@ profile mpd-daemon /usr/bin/mpd {
 
   owner @{HOME}/Música/ r,
   owner @{HOME}/Música/** r,
-  owner @{HOME}/.config/mpd/mpd.conf r,
-  owner @{HOME}/.config/mpd/mpd.log rw,
-  owner @{HOME}/.config/mpd/pid rw,
-  owner @{HOME}/.config/mpd/sticker.sql rwk,
-  owner @{HOME}/.config/mpd/tag_cache rw,
+  owner @{HOME}/.config/mpd rwkl,
+  owner @{HOME}/.config/mpd/* rwkl,
+  
+  #include <local/usr.bin.mpd>
 
 }

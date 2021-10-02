@@ -1,0 +1,4 @@
+owner /media/** r, 
+owner /media/DATOS/Música rwkl, 
+owner /media/DATOS/Música/* rwkl, 
+owner /media/DATOS/Música/** rwkl, 

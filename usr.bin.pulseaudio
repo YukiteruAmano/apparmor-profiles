@@ -57,6 +57,11 @@ profile pulseaudio /usr/bin/pulseaudio {
     owner @{HOME}/{.config/pulse,.pulse}/ rw,
     owner @{HOME}/{.config/pulse,.pulse}/* rw,
 
+    # Flatpak
+    @{HOME}/.local/share/ r,
+    @{HOME}/.local/share/* r,
+    @{HOME}/.local/share/** r,
+
     # /run access for pulseaudio
     owner /run/pulse/ rw,
     owner /run/pulse/.pulse-cookie rwk,
@@ -94,6 +99,8 @@ profile pulseaudio /usr/bin/pulseaudio {
     /usr/share/xfce4/applications/* r,
     /usr/share/applications/* r,
     /usr/share/pulseaudio/** r,
+    /usr/share/gnome/applications/ r,
+    /usr/share/gnome/applications/* r,
 
     # GDM3 config for pulseaudio
     owner /var/lib/gdm3/.config/pulse/ rw,

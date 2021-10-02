@@ -4,3 +4,5 @@
     # Dirs for download
     owner @{HOME}/Torrents/ rwk,
     owner @{HOME}/Torrents/** rwk,
+    owner /media/DATOS/Torrents/ rwk,
+    owner /media/DATOS/Torrents/** rwk,
