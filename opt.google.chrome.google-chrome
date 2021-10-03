@@ -1,0 +1,29 @@
+# vim:syntax=apparmor
+# AppAmor local profile for Google Chrome
+
+#include <tunables/global>
+
+profile google-chrome /opt/google/chrome/google-chrome {
+  #include <abstractions/base>
+  #include <abstractions/bash>
+
+  /{usr,}/bin/bash rix,
+  /{usr,}/bin/cat rix,
+  /{usr,}/bin/dash r,
+  /{usr,}/bin/grep rix,
+  /{usr,}/bin/mkdir rix,
+  /{usr,}/bin/readlink rix,
+  /{usr,}/bin/which rix,
+  /{usr,}/bin/dirname rix,
+  /{usr,}/bin/zenity rix,
+  
+  /dev/tty rw,
+  
+  /opt/google/chrome/chrome Px,
+  /opt/google/chrome/google-chrome r,
+  /opt/google/chrome/chrome_crashpad_handler mrix,
+  
+  @{PROC}/@{pid}/fd r,
+  @{PROC}/@{pid}/fd/* r,
+  @{PROC}/filesystems r,
+}

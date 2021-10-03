@@ -1,0 +1,48 @@
+# vim:syntax=apparmor
+# AppAmor local profile for Google Chrome
+
+#include <tunables/global>
+
+profile google-chrome-sandbox /opt/google/chrome/chrome-sandbox {
+  
+  capability chown,
+  capability fsetid,
+  capability setgid,
+  capability setuid,
+  capability sys_admin,
+  capability sys_chroot,
+  capability sys_ptrace,
+
+  /etc/ld.so.cache r,
+  /{usr,}/lib/@{multiarch}/ld-*.so* mr,
+  /{usr,}/lib/x86_64-linux-gnu/* mr,
+  /{usr,}/lib/x86_64-linux-gnu/*.so* mr,
+  /{usr,}/lib/x86_64-linux-gnu/* mr,
+  /{usr,}/lib/x86_64-linux-gnu/*.so* mr,
+  
+  /dev/urandom r,
+
+  /sys/devices/system/cpu/online r,
+  /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq r,
+
+  @{PROC}/ r,
+  @{PROC}/* r,
+  @{PROC}/*/fd/ r,
+  @{PROC}/cpuinfo r,
+  @{PROC}/stat r,
+  @{PROC}/@{pid}/ r,
+  @{PROC}/@{pid}/fd/ r,
+  @{PROC}/@{pid}/oom_adj w,
+  @{PROC}/@{pid}/oom_score_adj w,
+  @{PROC}/@{pid}/task/ r,
+  @{PROC}/@{pid}/task/[0-9]*/stat r,
+
+  owner /tmp/** rw,
+
+  # Transition to main chrome binary
+
+  /opt/google/chrome/chrome rPx,
+  /opt/google/chrome/chrome-sandbox r,
+  /opt/google/chrome/nacl_helper rix,
+
+}

@@ -1,0 +1,372 @@
+# vim:syntax=apparmor
+# AppAmor local profile for Google Chrome
+
+#include <tunables/global>
+
+profile chrome /opt/google/chrome/chrome {
+
+  #include <abstractions/audio>
+  #include <abstractions/cups-client>
+  #include <abstractions/dbus>
+  #include <abstractions/dbus-accessibility>
+  #include <abstractions/dbus-session>
+  #include <abstractions/gnome>
+  #include <abstractions/ibus>
+  #include <abstractions/kde>
+  #include <abstractions/nameservice>
+  #include <abstractions/openssl>
+  #include <abstractions/user-write>
+  #include <abstractions/user-download>
+  #include <abstractions/ssl_certs>
+  #include <abstractions/python>
+  #include <abstractions/dri-enumerate>
+  #include <abstractions/mesa>
+  #include <abstractions/dconf>
+  #include <abstractions/ubuntu-browsers.d/java>
+  #include <abstractions/ubuntu-browsers.d/user-files>
+  #include <abstractions/nvidia>
+  #include <abstractions/video>
+
+  # System capabilities
+
+  capability sys_admin,
+  capability sys_chroot,
+  capability sys_ptrace,
+  
+  # Network capabilities
+
+  network inet stream,
+  network inet dgram,
+  network inet6 stream,
+  network inet6 dgram,
+  network packet dgram,
+  network netlink,
+
+  # Access /{usr,}/bin
+
+  /{usr,}/bin/which rix,
+  /{usr,}/bin/dash mixr,
+  /{usr,}/bin/bash mixr,
+  /{usr,}/bin/zsh mixr,
+  /{usr,}/bin/sh mixr,
+  /{usr,}/bin/lsb_release Cxr,
+  /{usr,}/bin/xdg-open Cx,
+  /{usr,}/bin/xdg-settings Cx,
+
+  # Dev access
+
+  /dev/ r,
+  /dev/video* rw,
+
+  # ETC access
+
+  /etc/fstab r,
+  /etc/gai.conf r,
+  /etc/group r,
+  /etc/host.conf r,
+  /etc/hosts r,
+  /etc/lsb-release r,
+  /etc/mtab r,
+  /etc/nsswitch.conf r,
+  /etc/passwd r,
+  /etc/resolv.conf r,
+  /etc/udev/udev.conf r,
+  
+  # Access HOME
+
+  owner @{HOME}/* r,
+  owner @{HOME}/.ICEauthority r,
+  owner @{HOME}/.Xauthority r,
+  owner @{HOME}/.cache/dconf/user rw,
+  owner @{HOME}/.cache/google-chrome/ rw,
+  owner @{HOME}/.cache/google-chrome/** rw,
+  owner @{HOME}/.cache/google-chrome/Default/Cache/* rw,
+  owner @{HOME}/.cache/google-chrome/Default/Media*/* rw,
+  owner @{HOME}/.config/dconf/user r,
+  owner @{HOME}/.config/google-chrome/ rw,
+  owner @{HOME}/.config/google-chrome/** rwk,
+  owner @{HOME}/.config/ibus/bus/ w,
+  owner @{HOME}/.config/user-dirs.dirs r,
+  owner @{HOME}/.fontconfig/* r,
+  owner @{HOME}/.gtk-bookmarks r,
+  owner @{HOME}/.icons/ r,
+  owner @{HOME}/.local/share/icons/ r,
+  owner @{HOME}/.local/share/icons/** r,
+  owner @{HOME}/.local/share/mime/* r,
+  owner @{HOME}/.local/share/recently-used.xbel* rw,
+  owner @{HOME}/.pki/nssdb/* r,
+  owner @{HOME}/.pki/nssdb/*.db rwk,
+  owner @{HOME}/.pulse-cookie rwk,
+  owner @{HOME}/.thumbnails/normal/* r,
+  owner @{HOME}/.xsession-errors r,
+  owner @{HOME}/.config/ibus/bus/* r,
+  owner @{HOME}/Descargas/ r,
+  owner @{HOME}/Descargas/** rw,
+
+  # Nvidia support
+
+  /dev/nvidia0 rwk,
+  /etc/nvidia/* r, 
+  /dev/nvidiactl rwk, 
+  owner @{HOME}/.nv/ rwk,
+  owner @{HOME}/.nv/* rwk,
+  owner @{HOME}/.nGLCache/ rwk,
+  owner @{HOME}/.nv/GLCache/* rwk,
+  owner @{HOME}/.nv/GLCache/*/* rwk,
+
+  # Webcam
+
+  /dev/video0 rw,
+  /dev/video1 rw,
+
+  # Google binaries and libs
+
+  /opt/google/chrome/** r,
+  /opt/google/chrome/*.so mr,
+  /opt/google/chrome/lib/*.so mr,
+  /opt/google/chrome/chrome mrix,
+  /opt/google/chrome/chrome-sandbox rPx,
+  /opt/google/chrome/extensions/ rw,
+  /opt/google/chrome/google-chrome Px,
+  /opt/google/chrome/xdg-settings Cx,
+  /opt/google/chrome/chrome_crashpad_handler mrix,
+  /opt/google/chrome/WidevineCdm/_platform_specific/linux_x64/** mrix,
+  /opt/google/chrome/nacl_helper mrix, 
+
+  # Proc acccess
+
+  @{PROC}/** r,
+  @{PROC}/@{pid}/cmdline r,
+  @{PROC}/@{pid}/fd/ r,
+  @{PROC}/@{pid}/io r,
+  @{PROC}/@{pid}/maps r,
+  @{PROC}/@{pid}/mounts r,
+  @{PROC}/@{pid}/oom_score_adj w,
+  @{PROC}/@{pid}/stat r,
+  @{PROC}/@{pid}/statm r,
+  @{PROC}/@{pid}/status r,
+  @{PROC}/@{pid}/task/ r,
+  @{PROC}/@{pid}/clear_refs rw,
+  @{PROC}/@{pid}/task/[0-9]*/stat r,
+  @{PROC}/@{pid}/setgroups w,
+  @{PROC}/@{pid}/uid_map w,
+  @{PROC}/@{pid}/gid_map w,
+  @{PROC}/cpuinfo r,
+  @{PROC}/filesystems r,
+  @{PROC}/meminfo r,
+  @{PROC}/sys/kernel/shmmax r,
+  @{PROC}/sys/kernel/yama/ptrace_scope r,
+  @{PROC}/sys/net/ipv4/tcp_fastopen r,
+
+  # Resolvconf
+
+  /run/resolvconf/resolv.conf r,
+  /run/shm/.com.google.Chrome.* rw,
+  /run/shm/com.google.Chrome.shmem.* rw,
+  /run/user/[0-9]*/dconf/user rw,
+  /run/dbus/system_bus_socket rw,
+
+  # Make browsing directories work
+
+  / r,
+  /**/ r,
+
+  # Sys access
+
+  /sys/bus/pci/devices/ r,
+  /sys/devices/pci[0-9]*/**/class r,
+  /sys/devices/pci[0-9]*/**/device r,
+  /sys/devices/pci[0-9]*/**/irq r,
+  /sys/devices/pci[0-9]*/**/resource r,
+  /sys/devices/pci[0-9]*/**/vendor r,
+  /sys/devices/pci[0-9]*/**/idProduct r,
+  /sys/devices/pci[0-9]*/**/idVendor r,
+  /sys/devices/system/cpu/ r,
+  /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq r,
+  /sys/devices/system/cpu/cpufreq/policy0/cpuinfo_max_freq r,
+  /sys/devices/pci*/*/*/config r, 
+  /sys/devices/virtual/tty/tty*/active r, 
+
+  # TMP access
+
+  /tmp/ r,
+  /tmp/** mrw,
+  
+  # User shares
+  
+  /usr/share/X11/XErrorDB r,
+  /usr/share/glib-2.0/schemas/gschemas.compiled r,
+  /usr/share/gvfs/remote-volume-monitors/ r,
+  /usr/share/gvfs/remote-volume-monitors/* r,
+  /usr/share/icons/ r,
+  /usr/share/icons/** r,
+  /usr/share/mime/** r,
+  /usr/share/misc/pci.ids r,
+  /usr/share/pixmaps/ r,
+  /usr/share/pyshared/* r,
+  /usr/share/themes/** r,
+
+  # VAR access
+  /var/tmp/ r,
+  /var/tmp/* rw,
+
+  owner /{run,dev}/shm/pulse-shm* k,
+  /{run,dev}/shm/pulse-shm* rw,
+  /dev/shm/.com.google* rw,
+
+
+  profile chrome-xdg-settings /opt/google/chrome/xdg-settings {
+
+    /{usr,}/bin/dash rix,
+    /{usr,}/bin/zsh rix,
+    /{usr,}/bin/sh rix,
+    /{usr,}/bin/grep rix,
+    /{usr,}/bin/readlink rix,
+    /{usr,}/bin/sed rix,
+    /{usr,}/bin/which rix,
+    /{usr,}/bin/basename rix,
+    /{usr,}/bin/cut rix,
+    /{usr,}/bin/gawk rix,
+    /{usr,}/bin/mawk rix,
+    /{usr,}/bin/xdg-mime rix,
+  
+    /dev/null w,
+  
+    /etc/gnome/defaults.list r,
+    /etc/ld.so.cache r,
+    /etc/locale.alias r,
+  
+    /usr/share/applications/google-chrome.desktio r,
+
+    owner @{HOME}/.local/share/applications/ r,
+    owner @{HOME}/.local/share/applications/* r,
+    owner @{HOME}/.local/share/applications/google-chrome.desktop r,
+    owner @{HOME}/.local/share/applications/mimeapps.list r,
+    
+  
+    /{usr,}/lib/x86_64-linux-gnu/ld-*.so mr,
+    /{usr,}/lib/x86_64-linux-gnu/libc-*.so mr,
+    /{usr,}/lib/x86_64-linux-gnu/libdl-*.so mr,
+    /{usr,}/lib/x86_64-linux-gnu/libm-*.so mr,
+    /{usr,}/lib/x86_64-linux-gnu/libselinux.so.* mr,
+    /{usr,}/lib/libsigsegv.so.* mr,
+    /{usr,}/lib/locale/* r,
+    /{usr,}/lib/locale/** r,
+    /{usr,}/lib/x86_64-linux-gnu/gconv/gconv-modules.cache r,
+  
+    /opt/google/chrome/xdg-settings r,
+  
+    @{PROC}/*/maps r,
+    @{PROC}/filesystems r,
+
+  }
+
+  profile lsb_release /usr/bin/lsb_release {
+    
+    #include <abstractions/base>
+    #include <abstractions/python>
+
+    /{usr,}/bin/lsb_release rix,
+    /{usr,}/bin/dash ixr,
+    /{usr,}/bin/dpkg-query ixr,
+    /usr/bin/ r,
+    /usr/bin/python3.[0-4] r,
+    /usr/bin/python2.7 r,
+    
+    /etc/lsb-release r,
+    /etc/debian_version r,
+    /etc/dpkg/origins/debian r,
+    /var/lib/dpkg/** r,
+
+  }
+
+  profile xdg-open /usr/bin/xdg-open {
+    #include <abstractions/base>
+
+
+    /{usr,}/bin/dash rix,
+    /{usr,}/bin/zsh rix,
+    /{usr,}/bin/sh rix,
+
+    /etc/gnome/defaults.list r,
+    /etc/nsswitch.conf r,
+    /etc/passwd r,
+
+    owner @{HOME}/.local/share/applications/mimeapps.list r,
+    owner @{HOME}/.local/share/applications/mimeinfo.cache r,
+    owner @{HOME}/.local/share/mime/* r,
+
+    @{PROC}/*/fd/ r,
+
+    /usr/bin/transmission-gtk Px,
+    /usr/bin/xdg-open r,
+
+  }
+
+  profile xdg-settings /usr/bin/xdg-settings {
+
+    /{usr,}/bin/cat rix,
+    /{usr,}/bin/dash r,
+    /{usr,}/bin/grep rix,
+    /{usr,}/bin/readlink rix,
+    /{usr,}/bin/sed rix,
+    /{usr,}/bin/which rix,
+    /{usr,}/bin/tr rix,
+
+    /dev/null w,
+    
+    /etc/gnome/defaults.list r,
+    /etc/ld.so.cache r,
+    /etc/locale.alias r,
+    
+    /usr/share/applications/google-chrome.desktop r,
+    /usr/share/locale-langpack/** r,
+    
+    owner @{HOME}/.local/share/applications/google-chrome.desktop r,
+    owner @{HOME}/.local/share/applications/mimeapps.list r,
+    owner @{HOME}/.config/mimeapps.list r,
+    
+    /{usr,}/lib/x86_64-linux-gnu/ld-*.so r,
+    /{usr,}/lib/x86_64-linux-gnu/libc-*.so mr,
+    /{usr,}/lib/x86_64-linux-gnu/libdbus-1.so.* mr,
+    /{usr,}/lib/x86_64-linux-gnu/libdl-*.so mr,
+    /{usr,}/lib/x86_64-linux-gnu/libglib-2.0.so.* mr,
+    /{usr,}/lib/x86_64-linux-gnu/libm-*.so mr,
+    /{usr,}/lib/x86_64-linux-gnu/libpcre.so.* mr,
+    /{usr,}/lib/x86_64-linux-gnu/libpthread-*.so mr,
+    /{usr,}/lib/x86_64-linux-gnu/libresolv-*.so mr,
+    /{usr,}/lib/x86_64-linux-gnu/librt-*.so mr,
+    /{usr,}/lib/x86_64-linux-gnu/libselinux.so.* mr,
+    /{usr,}/lib/x86_64-linux-gnu/libz.so.* mr,
+    /{usr,}/lib/x86_64-linux-gnu/libreadline.so.* mr,
+    
+    @{PROC}/@{pid}/maps r,
+    @{PROC}/filesystems r,
+    
+    /{usr,}/bin/basename rix,
+    /{usr,}/bin/cut rix,
+    /{usr,}/bin/head rix,
+    /{usr,}/bin/gawk rix,
+    /{usr,}/bin/gconftool-2 rix,
+    /{usr,}/bin/mawk rix,
+    /{usr,}/bin/xdg-mime rix,
+    /{usr,}/bin/xdg-settings r,
+
+    /{usr,}lib/libsigsegv.so.* mr,
+    /{usr,}lib/locale/** r,
+    /{usr,}lib/x86_64-linux-gnu/gconv/gconv-modules.cache r,
+    /{usr,}lib/x86_64-linux-gnu/libdbus-glib-1.so.* mr,
+    /{usr,}lib/x86_64-linux-gnu/libffi.so.* mr,
+    /{usr,}lib/x86_64-linux-gnu/libgconf-2.so.* mr,
+    /{usr,}lib/x86_64-linux-gnu/libgio-2.0.so.* mr,
+    /{usr,}lib/x86_64-linux-gnu/libgmodule-2.0.so.* mr,
+    /{usr,}lib/x86_64-linux-gnu/libgobject-2.0.so.* mr,
+    /{usr,}lib/x86_64-linux-gnu/libgthread-2.0.so.* mr,
+    /{usr,}lib/x86_64-linux-gnu/libxml2.so.* mr,
+    /{usr,}lib/x86_64-linux-gnu/libsigsegv.so.* mr,
+    /{usr,}lib/x86_64-linux-gnu/libreadline.so.* mr,
+    /{usr,}lib/x86_64-linux-gnu/libmpfr.so.* mr,
+    /{usr,}lib/x86_64-linux-gnu/libgmp.so.* mr,
+    /{usr,}/lib/x86_64-linux-gnu/libtinfo.so.* mr,
+  }
+}
