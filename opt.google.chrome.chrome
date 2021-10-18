@@ -239,10 +239,8 @@ profile chrome /opt/google/chrome/chrome {
     /usr/share/applications/google-chrome.desktio r,
 
     owner @{HOME}/.local/share/applications/ r,
-    owner @{HOME}/.local/share/applications/* r,
     owner @{HOME}/.local/share/applications/google-chrome.desktop r,
     owner @{HOME}/.local/share/applications/mimeapps.list r,
-    
   
     /{usr,}/lib/x86_64-linux-gnu/ld-*.so mr,
     /{usr,}/lib/x86_64-linux-gnu/libc-*.so mr,

@@ -3,7 +3,7 @@
 
 #include <tunables/global>
 
-profile firefox-ese /usr/lib/firefox-esr/firefox-esr {
+profile firefox-esr /usr/lib/firefox-esr/firefox-esr {
     #include <abstractions/audio>
     #include <abstractions/cups-client>
     #include <abstractions/dbus-session>
@@ -19,6 +19,7 @@ profile firefox-ese /usr/lib/firefox-esr/firefox-esr {
     #include <abstractions/dri-enumerate>
     #include <abstractions/mesa>
     #include <abstractions/dconf>
+    #include <abstractions/nvidia>
 
     #########################
     #### Access policies ####

@@ -6,3 +6,8 @@
 	/opt/Discord/Discord mixr,
 	@{HOME}/Descargas/ rwk,
 	@{HOME}/Descargas/** rwk,
+	
+	# Fuentes
+	/media/DATOS/FONTS r, 
+	/media/DATOS/FONTS/* r, 
+	/media/DATOS/FONTS/** r, 

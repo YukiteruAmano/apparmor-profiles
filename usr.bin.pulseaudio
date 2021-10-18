@@ -36,6 +36,11 @@ profile pulseaudio /usr/bin/pulseaudio {
     /etc/alsa/conf.d/* r,
     @{HOME}/.asoundrc r,
 
+    # Flatpak
+    @{HOME}/.local/share/ r,
+    @{HOME}/.local/share/* r,
+    @{HOME}/.local/share/** r,
+
     # udev configuration
     /etc/udev/udev.conf r,
 
@@ -56,11 +61,6 @@ profile pulseaudio /usr/bin/pulseaudio {
     owner @{HOME}/.config/pulse/cookie rwk,
     owner @{HOME}/{.config/pulse,.pulse}/ rw,
     owner @{HOME}/{.config/pulse,.pulse}/* rw,
-
-    # Flatpak
-    @{HOME}/.local/share/ r,
-    @{HOME}/.local/share/* r,
-    @{HOME}/.local/share/** r,
 
     # /run access for pulseaudio
     owner /run/pulse/ rw,

@@ -17,10 +17,7 @@
 profile libreoffice-senddoc /usr/lib/libreoffice/program/senddoc {
   #include <abstractions/base>
 
-  #makes files like luRRRRR.tmp/lubRRRR.tmp where R is random
-  #Note, usually it's lub or luc, don't know why.
-  
-  owner /tmp/lu**       rw,
+  #include <abstractions/user-tmp>
 
   /{usr/,}bin/sh        rmix,
   /{usr/,}bin/bash      rmix,

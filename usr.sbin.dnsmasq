@@ -1,11 +1,24 @@
-# vim:syntax=apparmor
-# AppAmor local profile for dnsmasq
+# ------------------------------------------------------------------
+#
+#    Copyright (C) 2009 John Dong <jdong@ubuntu.com>
+#    Copyright (C) 2010 Canonical Ltd.
+#
+#    This program is free software; you can redistribute it and/or
+#    modify it under the terms of version 2 of the GNU General Public
+#    License published by the Free Software Foundation.
+#
+# ------------------------------------------------------------------
 
 @{TFTP_DIR}=/var/tftp /srv/tftpboot
 
 #include <tunables/global>
 
-profile /usr/sbin/dnsmasq /usr/{bin,sbin}/dnsmasq flags=(attach_disconnected) {
+# This profile has the name "/usr/sbin/dnsmasq", but attaches to both /usr/bin/dnsmasq and /usr/sbin/dnsmasq.
+# We are sorry for the confusion ;-) but this trick is needed to support distributions with merged bin and sbin
+# while not breaking the libvirtd profile that has rules with peer=/usr/sbin/dnsmasq
+# Future versions of AppArmor (> 2.13.x) will have "dnsmasq" as profile name.
+
+profile /usr/sbin/dnsmasq /usr/{bin,sbin}/dnsmasq flags=(complain,attach_disconnected) {
   #include <abstractions/base>
   #include <abstractions/dbus>
   #include <abstractions/nameservice>
@@ -29,6 +42,8 @@ profile /usr/sbin/dnsmasq /usr/{bin,sbin}/dnsmasq flags=(attach_disconnected) {
 
   owner /dev/tty rw,
 
+  @{PROC}/@{pid}/fd/ r,
+
   /etc/dnsmasq.conf r,
   /etc/dnsmasq.d/ r,
   /etc/dnsmasq.d/* r,
@@ -44,8 +59,8 @@ profile /usr/sbin/dnsmasq /usr/{bin,sbin}/dnsmasq flags=(attach_disconnected) {
 
   /var/log/dnsmasq*.log w,
 
-  /usr/share/dnsmasq/ r,
-  /usr/share/dnsmasq/* r,
+  /usr/share/dnsmasq{-base,}/ r,
+  /usr/share/dnsmasq{-base,}/* r,
 
   /{,var/}run/*dnsmasq*.pid w,
   /{,var/}run/dnsmasq-forwarders.conf r,
@@ -74,6 +89,7 @@ profile /usr/sbin/dnsmasq /usr/{bin,sbin}/dnsmasq flags=(attach_disconnected) {
 
   # libvirt lease helper
   /usr/lib{,64}/libvirt/libvirt_leaseshelper Cx -> libvirt_leaseshelper,
+  /usr/libexec/libvirt_leaseshelper Cx -> libvirt_leaseshelper,
 
   # lxc-net pid and lease files
   /{,var/}run/lxc/dnsmasq.pid    rw,
@@ -95,12 +111,13 @@ profile /usr/sbin/dnsmasq /usr/{bin,sbin}/dnsmasq flags=(attach_disconnected) {
   /{,var/}run/NetworkManager/dnsmasq.pid w,
   /{,var/}run/NetworkManager/NetworkManager.pid w,
 
-  profile libvirt_leaseshelper {
+  profile libvirt_leaseshelper flags=(complain) {
     #include <abstractions/base>
 
     /etc/libnl-3/classid r,
 
     /usr/lib{,64}/libvirt/libvirt_leaseshelper m,
+    /usr/libexec/libvirt_leaseshelper m,
 
     owner @{PROC}/@{pid}/net/psched r,
     owner @{PROC}/@{pid}/status r,

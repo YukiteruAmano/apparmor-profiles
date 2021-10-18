@@ -20,7 +20,8 @@ profile netstat /{usr/,}bin/netstat {
     /etc/networks r,
 
     # /proc access
-    @{PROC} r,
+    @{PROC}/ r,
+    @{PROC}/* r,
     @{PROC}/@{pids}/cmdline r,
     @{PROC}/@{pids}/fd r,
     @{PROC}/@{pids}/fd/* r,

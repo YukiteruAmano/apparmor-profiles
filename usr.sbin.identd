@@ -10,21 +10,24 @@
 # ------------------------------------------------------------------
 
 #include <tunables/global>
-profile traceroute /usr/{{bin,sbin}/traceroute,bin/linux-traceroute,bin/traceroute.db} flags=(complain) {
+
+profile identd /usr/{bin,sbin}/identd flags=(complain) {
   #include <abstractions/base>
-  #include <abstractions/consoles>
   #include <abstractions/nameservice>
-
-  deny capability net_admin, # noisy setsockopt() calls
-  capability net_raw,
-
-  network inet raw,
-  network inet6 raw,
-
-  /usr/{{bin,sbin}/traceroute,bin/linux-traceroute,bin/traceroute.db} mrix,
-  @{PROC}/net/route r,
-  @{PROC}/sys/net/ipv4/{tcp_ecn,tcp_sack,tcp_timestamps,tcp_window_scaling} r,
+  capability net_bind_service,
+  capability setgid,
+  capability setuid,
+  network netlink dgram,
+  /etc/identd.conf         r,
+  /etc/identd.key          r,
+  /etc/identd.pid          w,
+  /usr/{bin,sbin}/identd   rmix,
+  @{PROC}/net/tcp          r,
+  @{PROC}/net/tcp6         r,
+  /{,var/}run/identd.pid   w,
+  /{,var/}run/identd/           w,
+  /{,var/}run/identd/identd.pid w,
 
   # Site-specific additions and overrides. See local/README for details.
-  #include <local/usr.sbin.traceroute>
+  #include <local/usr.sbin.identd>
 }

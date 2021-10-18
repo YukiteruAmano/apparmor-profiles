@@ -10,21 +10,26 @@
 # ------------------------------------------------------------------
 
 #include <tunables/global>
-profile traceroute /usr/{{bin,sbin}/traceroute,bin/linux-traceroute,bin/traceroute.db} flags=(complain) {
+
+profile klogd /{usr/,}{bin,sbin}/klogd flags=(complain) {
   #include <abstractions/base>
-  #include <abstractions/consoles>
-  #include <abstractions/nameservice>
 
-  deny capability net_admin, # noisy setsockopt() calls
-  capability net_raw,
+  capability sys_admin, # for backward compatibility with kernel <= 2.6.37
+  capability syslog,
 
-  network inet raw,
-  network inet6 raw,
+  network inet stream,
 
-  /usr/{{bin,sbin}/traceroute,bin/linux-traceroute,bin/traceroute.db} mrix,
-  @{PROC}/net/route r,
-  @{PROC}/sys/net/ipv4/{tcp_ecn,tcp_sack,tcp_timestamps,tcp_window_scaling} r,
+  /boot/System.map*     r,
+  @{PROC}/kmsg		r,
+  @{PROC}/kallsyms	r,
+  /dev/tty		rw,
+
+  /{usr/,}{bin,sbin}/klogd	rmix,
+  /var/log/boot.msg     rwl,
+  /{,var/}run/klogd.pid    krwl,
+  /{,var/}run/klogd/klogd.pid krwl,
+  /{,var/}run/klogd/kmsg   r,
 
   # Site-specific additions and overrides. See local/README for details.
-  #include <local/usr.sbin.traceroute>
+  #include <local/sbin.klogd>
 }
