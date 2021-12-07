@@ -1,0 +1,17 @@
+# vim:syntax=apparmor                                                                                                                 
+                                                                                                                          
+    # Denegando acceso a directorios delicados en el /
+    audit deny /boot/ mrwkl,
+    audit deny /boot/** mrwkl,
+    audit deny /root/ mrwkl,
+    audit deny /root/** mrwkl,
+    audit deny /media/ mrwkl,
+    audit deny /media/** mrwkl,
+    audit deny /usr/local/ mrwkl,
+    audit deny /usr/local/** mrwkl,
+    audit deny /srv/ mrwkl,
+    audit deny /srv/** mrwkl,
+
+    # Denegando acceso a archivos sensibles
+    deny /etc/passwd rwl, 
+    deny /etc/shadow rwl,

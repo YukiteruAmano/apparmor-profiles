@@ -19,6 +19,9 @@ profile firefox-esr /usr/lib/firefox-esr/firefox-esr {
     #include <abstractions/dri-enumerate>
     #include <abstractions/mesa>
     #include <abstractions/dconf>
+    #include <abstractions/deny-dirs-root>
+    #include <abstractions/deny-dirs-optional>
+    #include <abstractions/deny-dirs-home>
     #include <abstractions/nvidia>
 
     #########################
@@ -55,6 +58,9 @@ profile firefox-esr /usr/lib/firefox-esr/firefox-esr {
 
     @{PROC}/@{pid}/net/if_inet6 r,
     @{PROC}/@{pid}/net/ipv6_route r,
+
+    # Access to etc for Mozilla products
+    /etc/firefox-esr/firefox-esr.js r,
 
     # Access for hostname, timezone and lsb-release
 
@@ -126,6 +132,11 @@ profile firefox-esr /usr/lib/firefox-esr/firefox-esr {
     owner @{HOME}/.cache/* rwk,
     owner @{HOME}/.cache/mozilla rwk,
     owner @{HOME}/.cache/mozilla/**/** rwk,
+    owner @{HOME}/.cache/mozilla/**/** rwk,
+    owner @{HOME}/.cache/nvidia/ rwk,
+    owner @{HOME}/.cache/nvidia/** rwk,
+    owner @{HOME}/.cache/nvidia/GLCache/ rwk,
+    owner @{HOME}/.cache/nvidia/GLCache/** rwk,
     owner @{HOME}/.{firefox,mozilla}/ rw,
     owner @{HOME}/.{firefox,mozilla}/** rw,
     owner @{HOME}/.{firefox,mozilla}/**/*.{db,parentlock,sqlite}* k,
@@ -187,7 +198,7 @@ profile firefox-esr /usr/lib/firefox-esr/firefox-esr {
     deny /boot/ r,
     deny /boot/* r, 
     deny /var/cache/fontconfig/ w,
-
+    
     # Deny access for gconftool for configuration
     
     deny /usr/bin/gconftool-2 x,

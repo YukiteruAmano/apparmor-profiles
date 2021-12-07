@@ -4,6 +4,9 @@
 #include <tunables/global>
 
 profile google-chrome-sandbox /opt/google/chrome/chrome-sandbox {
+
+  #include <abstractions/deny-dirs-root>
+  #include <abstractions/deny-dirs-home>
   
   capability chown,
   capability fsetid,

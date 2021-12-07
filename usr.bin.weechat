@@ -11,6 +11,9 @@ profile weechat /usr/bin/weechat {
     #include <abstractions/perl>
     #include <abstractions/python>
     #include <abstractions/ssl_certs>
+    #include <abstractions/deny-dirs-root>
+    #include <abstractions/deny-dirs-home>
+    #include <abstractions/deny-dirs-optional>
 
     # exec other stuff
     /usr/bin/uname ixr,
@@ -37,9 +40,16 @@ profile weechat /usr/bin/weechat {
 
     # Configuration files and logs
     owner @{HOME}/ r,
-    owner @{HOME}/.weechat/ rw,
-    owner @{HOME}/.weechat/** rw,
-    owner @{HOME}/.weechat/weechat.log rwk,
+    owner @{HOME}/.config/weechat/ rwk,
+    owner @{HOME}/.config/weechat/** rwk,
+    owner @{HOME}/.local/share/weechat/ rwk,
+    owner @{HOME}/.local/share/weechat/** rwk,
+    owner @{HOME}/.cache/weechat/ rwk,
+    owner @{HOME}/.cache/weechat/** rwk,
+
+    # Run
+    owner @{run}/user/*/weechat/ rw,
+    owner @{run}/user/*/weechat/** rw,
 
     # Local config for weechat
     #include <local/usr.bin.weechat>

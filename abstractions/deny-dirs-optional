@@ -1,0 +1,5 @@
+# vim:syntax=apparmor                                                                                                                 
+                                                                                                                          
+    # Denegando acceso a directorios delicados opcionales
+    audit deny /opt/ mrwkl,
+    audit deny /opt/** mrwkl,

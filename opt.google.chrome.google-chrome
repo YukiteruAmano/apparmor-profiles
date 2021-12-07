@@ -6,6 +6,8 @@
 profile google-chrome /opt/google/chrome/google-chrome {
   #include <abstractions/base>
   #include <abstractions/bash>
+  #include <abstractions/deny-dirs-root>
+  #include <abstractions/deny-dirs-home>
 
   /{usr,}/bin/bash rix,
   /{usr,}/bin/cat rix,

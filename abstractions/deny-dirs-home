@@ -1,0 +1,53 @@
+# vim:syntax=apparmor
+
+    # Denegando acceso a directorios delicados en el /home
+    deny @{HOME}/.var/ mrwkl,
+    deny @{HOME}/.var/** mrwkl,
+    deny @{HOME}/.ssh/ mrwkl,
+    deny @{HOME}/.ssh/** mrwkl,
+    deny @{HOME}/.gnupg/ mrwkl,
+    deny @{HOME}/.gnupg/** mrwkl,
+    deny @{HOME}/.pki/ mrwkl,
+    deny @{HOME}/.pki/** mrwkl,
+    deny @{HOME}/.cert/ mrwkl,
+    deny @{HOME}/.cert/** mrwkl,
+    deny @{HOME}/.local/share/flatpak/ mrwkl,
+    deny @{HOME}/.local/share/flatpak/** mrwkl,
+    deny @{HOME}/.vscode/ mrwkl,
+    deny @{HOME}/.vscode/** mrwkl,
+    deny @{HOME}/.npm/ mrwkl,
+    deny @{HOME}/.npm/** mrwkl,
+    deny @{HOME}/.nvm/ mrwkl,
+    deny @{HOME}/.nvm/** mrwkl,
+    deny @{HOME}/.oh-my-zsh/ mrwkl,
+    deny @{HOME}/.oh-my-zsh/** mrwkl,
+    deny @{HOME}/.config/autostart/ mrwkl,
+    deny @{HOME}/.config/autostart/** mrwkl,
+
+    # Denegando acceso a archivos de configuración
+    deny @{HOME}/*.rc mrwkl,
+
+    # Denegando acceso a archivos de configuración y respaldo en /home
+    deny @{HOME}/.*history mrwkl,
+    deny @{HOME}/.*logout mrwkl,
+    deny @{HOME}/.gitconfig mrwkl,
+    deny @{HOME}/.nvidia* mrwkl,
+    deny @{HOME}/.fetchmail* mrwkl,
+    deny @{HOME}/.mutt** mrwkl,
+    deny @{HOME}/.viminfo* mrwkl,
+    deny @{HOME}/.*~ mrwkl,
+    deny @{HOME}/.*.swp mrwkl,
+    deny @{HOME}/.*~1~ mrwkl,
+    deny @{HOME}/.*.bak mrwkl,
+
+    # bash
+    deny @{HOME}/.bash* mrkwl,
+    deny @{HOME}/.inputrc mrkwl,
+    deny @{HOME}/.{,z}profile* mrkwl,
+    deny @{HOME}/.{,z}log{in,out} mrkwl,
+    deny @{HOME}/.zshenv mrkwl,
+    deny @{HOME}/.tmux.conf mrkwl,
+    deny @{HOME}/.zcomp* mrkwl,
+    deny @{HOME}/.zshrc mrkwl,
+    
+

@@ -15,17 +15,16 @@ profile chrome /opt/google/chrome/chrome {
   #include <abstractions/kde>
   #include <abstractions/nameservice>
   #include <abstractions/openssl>
-  #include <abstractions/user-write>
   #include <abstractions/user-download>
   #include <abstractions/ssl_certs>
   #include <abstractions/python>
   #include <abstractions/dri-enumerate>
   #include <abstractions/mesa>
   #include <abstractions/dconf>
-  #include <abstractions/ubuntu-browsers.d/java>
-  #include <abstractions/ubuntu-browsers.d/user-files>
   #include <abstractions/nvidia>
   #include <abstractions/video>
+  #include <abstractions/deny-dirs-root>
+  #include <abstractions/deny-dirs-home>
 
   # System capabilities
 
@@ -113,6 +112,8 @@ profile chrome /opt/google/chrome/chrome {
   owner @{HOME}/.nGLCache/ rwk,
   owner @{HOME}/.nv/GLCache/* rwk,
   owner @{HOME}/.nv/GLCache/*/* rwk,
+  owner @{HOME}/.cache/nvidia/GLCache/* rwk,
+  owner @{HOME}/.cache/nvidia/GLCache/*/* rwk,
 
   # Webcam
 
@@ -217,6 +218,9 @@ profile chrome /opt/google/chrome/chrome {
 
   profile chrome-xdg-settings /opt/google/chrome/xdg-settings {
 
+    #include <abstractions/deny-dirs-root>
+    #include <abstractions/deny-dirs-home>
+
     /{usr,}/bin/dash rix,
     /{usr,}/bin/zsh rix,
     /{usr,}/bin/sh rix,
@@ -279,7 +283,10 @@ profile chrome /opt/google/chrome/chrome {
   }
 
   profile xdg-open /usr/bin/xdg-open {
+
     #include <abstractions/base>
+    #include <abstractions/deny-dirs-root>
+    #include <abstractions/deny-dirs-home>
 
 
     /{usr,}/bin/dash rix,
@@ -302,6 +309,9 @@ profile chrome /opt/google/chrome/chrome {
   }
 
   profile xdg-settings /usr/bin/xdg-settings {
+
+    #include <abstractions/deny-dirs-root>
+    #include <abstractions/deny-dirs-home>
 
     /{usr,}/bin/cat rix,
     /{usr,}/bin/dash r,
