@@ -12,6 +12,9 @@
   #include <abstractions/python>
   #include <abstractions/totem>
   #include <abstractions/ubuntu-helpers>
+  #include <abstractions/deny-dirs-root>
+  #include <abstractions/deny-dirs-home>
+  #include <abstractions/deny-dirs-optional>
 
   signal (send) set=("kill") peer=unconfined,
 

@@ -6,6 +6,9 @@
 profile mpd-daemon /usr/bin/mpd {
   #include <abstractions/audio>
   #include <abstractions/base>
+  #include <abstractions/nameservice>
+  #include <abstractions/deny-dirs-optional>
+  #include <abstractions/deny-dirs-home>
 
   /usr/bin/mpd mr,
   /usr/bin/pulseaudio Px,
@@ -23,7 +26,19 @@ profile mpd-daemon /usr/bin/mpd {
   owner @{HOME}/Música/** r,
   owner @{HOME}/.config/mpd rwkl,
   owner @{HOME}/.config/mpd/* rwkl,
-  
+  @{HOME}/.config/mpd/playlists/ rw,
+  @{HOME}/.config/mpd/playlists/* rw,
+
+  # Deny sensible dirs in /
+  audit deny /boot/ mrwkl,
+  audit deny /boot/** mrwkl,
+  audit deny /root/ mrwkl,
+  audit deny /root/** mrwkl,
+  audit deny /usr/local/ mrwkl,
+  audit deny /usr/local/** mrwkl,
+  audit deny /srv/ mrwkl,
+  audit deny /srv/** mrwkl,
+
   #include <local/usr.bin.mpd>
 
 }

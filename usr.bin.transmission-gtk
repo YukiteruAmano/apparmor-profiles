@@ -14,6 +14,9 @@
     #include <abstractions/nameservice>
     #include <abstractions/user-download>
     #include <abstractions/gnome>
+    #include <abstractions/deny-dirs-root>
+    #include <abstractions/deny-dirs-home>
+    #include <abstractions/deny-dirs-optional>
 
     # allow directory listings (ie 'r' on directories) so browsing via the file
     # dialog works

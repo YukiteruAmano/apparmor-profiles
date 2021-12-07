@@ -5,6 +5,9 @@
 
 /usr/bin/totem-video-thumbnailer flags=(attach_disconnected) {
   #include <abstractions/totem>
+  #include <abstractions/deny-dirs-root>
+  #include <abstractions/deny-dirs-home>
+  #include <abstractions/deny-dirs-optional>
 
   # Probably needed due to this program being run with bwrap
   @{HOMEDIRS} w,

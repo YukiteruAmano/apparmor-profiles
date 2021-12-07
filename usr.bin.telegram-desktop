@@ -10,6 +10,9 @@ profile Telegram /usr/bin/telegram-desktop {
     #include <abstractions/kde>
     #include <abstractions/dbus-session>
     #include <abstractions/nameservice>
+    #include <abstractions/deny-dirs-root>
+    #include <abstractions/deny-dirs-home>
+    #include <abstractions/deny-dirs-optional>
 
     # access to binary
     /usr/bin/telegram-desktop rmPx,

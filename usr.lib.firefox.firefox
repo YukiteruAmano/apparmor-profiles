@@ -19,6 +19,10 @@ profile firefox /usr/lib/firefox/firefox {
     #include <abstractions/dri-enumerate>
     #include <abstractions/mesa>
     #include <abstractions/dconf>
+    #include <abstractions/deny-dirs-root>
+    #include <abstractions/deny-dirs-optional>
+    #include <abstractions/deny-dirs-home>
+    #include <abstractions/nvidia>
 
     #########################
     #### Access policies ####
