@@ -13,5 +13,5 @@
     audit deny /srv/** mrwkl,
 
     # Denegando acceso a archivos sensibles
-    deny /etc/passwd rwl, 
-    deny /etc/shadow rwl,
+    audit deny /etc/passwd rwl, 
+    audit deny /etc/shadow rwl,
