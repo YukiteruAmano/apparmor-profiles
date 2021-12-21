@@ -101,6 +101,8 @@ profile chrome /opt/google/chrome/chrome {
   owner @{HOME}/.config/ibus/bus/* r,
   owner @{HOME}/Descargas/ r,
   owner @{HOME}/Descargas/** rw,
+  owner @{HOME}/Imágenes/ r,
+  owner @{HOME}/Imágenes/** rw,
 
   # Nvidia support
 
